@@ -49,7 +49,7 @@ public class ProcessLog {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
 
 		convertedString = s.replaceAll("\\s", "");
-		Pattern pattern = Pattern.compile("((\\d+)(\\.)(\\d+))((.*))");
+		Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)(\\d+)(.*)((\\d+)(\\.)(\\d+))((\\d+)(\\.)(\\d+))((\\d{2})(\\:)(\\d{2})(\\:)(\\d{2}))");
 		matcher = pattern.matcher(convertedString);
 		Document object = new Document();
 
