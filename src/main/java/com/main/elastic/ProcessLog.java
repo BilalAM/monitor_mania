@@ -34,18 +34,13 @@ public class ProcessLog {
 
 	// TESTING LIST
 	private static List<String> values = new ArrayList<>();
-	private static List<String> values2 = new ArrayList<>();
 
 	public static void getProcesses(String command) throws Exception {		
 		Process process = Runtime.getRuntime().exec(command);
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				processString2(line);
-				//values.add(line.replaceAll("\\s", ""));
-			}
-			for(String s : values2){
-				System.out.println(s);
+				processString(line);
 			}
 		}
 	}
@@ -59,34 +54,21 @@ public class ProcessLog {
 		Document object = new Document();
 
 		while (matcher.find()) {
-			object.put("USAGE", matcher.group(1));
-			object.put("NAME", matcher.group(5));
+			object.put("USER NAME", matcher.group(2));
+			object.put("PROCESS NAME", matcher.group(4));
+			object.put("CPU USAGE %", matcher.group(5));
+			object.put("MEMORY USAGE %", matcher.group(9));
+			object.put("VIRTUAL SIZE", matcher.group(3));
+			object.put("UP TIME", matcher.group(13));
+
 		}
 		object.put("DATE-TIME", LocalDateTime.now().format(formatter));
 		collection.insertOne(object);
 	}
-	private static void processString2(String s) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
-
-		convertedString = s.replaceAll("\\s", "");
-		Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)(\\d+)(.*)((\\d+)(\\.)(\\d+))((\\d+)(\\.)(\\d+))((\\d{2})(\\:)(\\d{2})(\\:)(\\d{2}))");
-		matcher = pattern.matcher(convertedString);
-		Document object = new Document();
-		
-		//userName group(2)
-		//size in kilo (group 3)
-		//processName group(4)
-		//cpuUsage group(5)
-		//mem usage group(9)
-		while (matcher.find()) {
-			values2.add(matcher.group(13));
-		}
-		//collection.insertOne(object);
-	}
 
 	public static void initSimulation() throws Exception {
-		for (int i = 0; i < 1000; i++) {
-			getProcesses("ps -eo %cpu,cmd");
+		for (int i = 0; i < 1; i++) {
+			getProcesses("s o pid=,user=,vsz,cmd=,%cpu=,%mem,time -e");
 			System.out.println("hello");
 
 			Thread.sleep(50);
