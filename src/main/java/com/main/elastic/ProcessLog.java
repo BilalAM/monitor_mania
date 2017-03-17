@@ -55,7 +55,7 @@ public class ProcessLog {
 
     public static void initSimulation() throws Exception {
         for (int i = 0; i < 1; i++) {
-            getProcesses("s o pid=,user=,vsz,cmd=,%cpu=,%mem,time -e");
+            getProcesses("ps o pid=,user=,vsz,cmd=,%cpu=,%mem,time -e");
             System.out.println("hello");
 
             Thread.sleep(50);
