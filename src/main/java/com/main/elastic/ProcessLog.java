@@ -1,10 +1,13 @@
 package com.main.elastic;
 
+import com.google.gson.Gson;
 import com.monitor.utils.ESClient;
 import org.bson.Document;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -35,7 +38,6 @@ public class ProcessLog {
 
         TransportClient client = ESClient.getTransportClient();
 
-        client.prepareBulk().add(new IndexRequest("testIndex", "testType"));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
 
@@ -53,12 +55,14 @@ public class ProcessLog {
             object.put("UP TIME", matcher.group(13));
 
         }
-        object.put("DATE-TIME", LocalDateTime.now().format(formatter));
-        IndexRequestBuilder indexRequestBuilder = client.prepareIndex();
-        indexRequestBuilder.setType("testType");
-        indexRequestBuilder.setIndex("testIndex");
-        indexRequestBuilder.setSource(object);
-        indexRequestBuilder.execute();
+        object.put("DATE-TIME", DateTime.now().toDateTimeISO().toString());
+//        IndexRequestBuilder indexRequestBuilder = client.prepareIndex();
+//        indexRequestBuilder.setType("testType");
+//        indexRequestBuilder.setIndex("testIndex");
+//        indexRequestBuilder.setSource(object);
+//        indexRequestBuilder.execute();
+
+        ESClient.indexDocument("testindex", "testtype", object);
 
     }
 
