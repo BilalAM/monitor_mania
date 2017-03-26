@@ -1,16 +1,13 @@
 package com.main.elastic;
 
+import com.monitor.utils.ESClient;
 import org.bson.Document;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,10 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProcessLog {
-//    private static MongoClient myClient = new MongoClient("localhost:27017");
-//    private static MongoDatabase database = myClient.getDatabase("MonitorSet");
-//    private static MongoCollection<Document> collection = database.getCollection("testCollection");
-
     // TESTING LIST
     private static List<String> values = new ArrayList<>();
 
@@ -39,11 +32,8 @@ public class ProcessLog {
     }
 
     private static void processStringElastic(String s) throws UnknownHostException {
-        Settings settings = Settings.builder()
-                .put("cluster.name", "elasticsearch")
-                .put("client.transport.sniff", false).build();
-        TransportClient client = new PreBuiltTransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
+
+        TransportClient client = ESClient.getTransportClient();
 
         client.prepareBulk().add(new IndexRequest("testIndex", "testType"));
 
