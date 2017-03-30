@@ -1,4 +1,4 @@
-package com.monitor.utils;
+package com.monitor.services;
 
 import com.google.gson.Gson;
 import org.elasticsearch.action.index.IndexRequest;
@@ -14,11 +14,11 @@ import java.net.UnknownHostException;
 /**
  * @author saifasif
  */
-public class ESClient {
+public class ESClientService {
 
     private static TransportClient INSTANCE;
 
-    private ESClient() {
+    private ESClientService() {
     }
 
     /**

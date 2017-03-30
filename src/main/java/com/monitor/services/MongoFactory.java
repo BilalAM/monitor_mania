@@ -1,4 +1,4 @@
-package com.monitor.utils;
+package com.monitor.services;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -8,7 +8,7 @@ import org.bson.Document;
 /**
  * @author saifasif
  */
-public class MongoConnection {
+public class MongoFactory {
 
     private static final MongoClient myClient = new MongoClient("localhost:27017");
     private static final MongoDatabase database = myClient.getDatabase("MonitorSet");

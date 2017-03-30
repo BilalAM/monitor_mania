@@ -1,11 +1,7 @@
 package com.main.elastic;
 
-import com.google.gson.Gson;
-import com.monitor.utils.ESClient;
+import com.monitor.services.ESClientService;
 import org.bson.Document;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.joda.time.DateTime;
 
@@ -36,7 +32,7 @@ public class ProcessLog {
 
     private static void processStringElastic(String s) throws UnknownHostException {
 
-        TransportClient client = ESClient.getTransportClient();
+        TransportClient client = ESClientService.getTransportClient();
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
@@ -62,7 +58,7 @@ public class ProcessLog {
 //        indexRequestBuilder.setSource(object);
 //        indexRequestBuilder.execute();
 
-        ESClient.indexDocument("testindex", "testtype", object);
+        ESClientService.indexDocument("testindex", "testtype", object);
 
     }
 
