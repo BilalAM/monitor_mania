@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 public class ESClientService {
 
     private static TransportClient INSTANCE;
+    private static  IndexRequest indexRequest = new IndexRequest("testindex1", "testtype");
 
     private ESClientService() {
     }
@@ -44,7 +45,6 @@ public class ESClientService {
     }
 
     public static void indexDocument(String indexName, String indexType, Object o) {
-        IndexRequest indexRequest = new IndexRequest("testindex1", "testtype", "1");
         indexRequest.source(new Gson().toJson(o));
         IndexResponse response = getTransportClient().index(indexRequest).actionGet();
 
