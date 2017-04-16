@@ -25,43 +25,10 @@ public class ProcessLog {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                processStringElastic(line);
+                processString(line);
             }
         }
     }
-
-    private static void processStringElastic(String s) throws UnknownHostException {
-
-        TransportClient client = ESClientService.getTransportClient();
-
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
-
-        String convertedString = s.replaceAll("\\s", "");
-        Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)(\\d+)(.*)((\\d+)(\\.)(\\d+))((\\d+)(\\.)(\\d+))((\\d{2})(\\:)(\\d{2})(\\:)(\\d{2}))");
-        Matcher matcher = pattern.matcher(convertedString);
-        Document object = new Document();
-
-        while (matcher.find()) {
-            object.put("USER NAME", matcher.group(2));
-            object.put("PROCESS NAME", matcher.group(4));
-            object.put("CPU USAGE %", matcher.group(5));
-            object.put("MEMORY USAGE %", matcher.group(9));
-            object.put("VIRTUAL SIZE", matcher.group(3));
-            object.put("UP TIME", matcher.group(13));
-
-        }
-        object.put("DATE-TIME", DateTime.now().toDateTimeISO().toString());
-//        IndexRequestBuilder indexRequestBuilder = client.prepareIndex();
-//        indexRequestBuilder.setType("testType");
-//        indexRequestBuilder.setIndex("testIndex");
-//        indexRequestBuilder.setSource(object);
-//        indexRequestBuilder.execute();
-
-        ESClientService.indexDocument("testindex", "testtype", object);
-
-    }
-
     private static void processString(String s) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
 
@@ -80,7 +47,7 @@ public class ProcessLog {
 
         }
         object.put("DATE-TIME", LocalDateTime.now().format(formatter));
-//        collection.insertOne(object);
+        ESClientService.indexDocument("testindex1", "testtype", object);
     }
 
     public static void initSimulation() throws Exception {
