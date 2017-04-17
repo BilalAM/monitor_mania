@@ -29,6 +29,17 @@ public class ProcessLog {
             }
         }
     }
+	/*
+	 * COMMITS
+	 * 
+	 * TIME 1:33 PM 
+	 * LOCATION : University Central Library Park In Front Of
+	 * Discussion Hall
+	 * DATE : 17th April
+	 * 
+	 * -- Parsing CPU% , MEMORY% as Double type
+	 * -- Kibana assigns them as default string type , should be of type double 
+	 */
     private static void processString(String s) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
 
