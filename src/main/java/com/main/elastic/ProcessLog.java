@@ -40,8 +40,8 @@ public class ProcessLog {
         while (matcher.find()) {
             object.put("USER NAME", matcher.group(2));
             object.put("PROCESS NAME", matcher.group(4));
-            object.put("CPU USAGE %", matcher.group(5));
-            object.put("MEMORY USAGE %", matcher.group(9));
+            object.put("CPU USAGE %", Double.parseDouble(matcher.group(5)));
+			object.put("MEMORY USAGE %", Double.parseDouble(matcher.group(9)));
             object.put("VIRTUAL SIZE", matcher.group(3));
             object.put("UP TIME", matcher.group(13));
 
