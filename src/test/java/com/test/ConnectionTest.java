@@ -1,6 +1,7 @@
 package com.test;
 
 import com.google.gson.Gson;
+import javaslang.control.Try;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -31,10 +32,21 @@ public class ConnectionTest {
         map.put("Time", DateTime.now().toDateTimeISO().toString());
         map.put("name", "blah");
 
-        IndexRequest indexRequest = new IndexRequest("testindex1","testtype", "1");
+        IndexRequest indexRequest = new IndexRequest("testindex1", "testtype", "1");
         indexRequest.source(new Gson().toJson(map));
         IndexResponse response = client.index(indexRequest).actionGet();
         System.out.println(response.status().getStatus());
+    }
+
+    @Test
+    public void testTwo() {
+        int result = Try.of(() -> badDivision(1, 0))
+                .recover(x -> -1).getOrElseThrow(() -> new RuntimeException("something snapped"));
+        System.out.println(result);
+    }
+
+    private int badDivision(int a, int b) {
+        return a / b;
     }
 
 }
