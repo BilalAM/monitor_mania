@@ -1,15 +1,13 @@
 package com.main.elastic;
 
+import com.monitor.es.beans.stats.StatisticsES;
 import com.monitor.services.ESClientService;
-import org.bson.Document;
+import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,24 +39,9 @@ public class ProcessLog {
      * -- Parsing CPU% , MEMORY% as Double type
      * -- Kibana assigns them as default string type , should be of type double
      */
+    @Deprecated
     private static void processString(String s) {
-
-        String convertedString = s.replaceAll("\\s", "");
-        Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)(\\d+)(.*)((\\d+)(\\.)(\\d+))((\\d+)(\\.)(\\d+))((\\d{2})(\\:)(\\d{2})(\\:)(\\d{2}))");
-        Matcher matcher = pattern.matcher(convertedString);
-        Document object = new Document();
-
-        while (matcher.find()) {
-            object.put("userName", matcher.group(2));
-            object.put("processName", matcher.group(4));
-            object.put("cpuUsagePercentage", Double.parseDouble(matcher.group(5)));
-            object.put("memoryUsagePercentage", Double.parseDouble(matcher.group(9)));
-            object.put("VirtualSize", Long.parseLong(matcher.group(3)));
-            object.put("upTime", Double.parseDouble(matcher.group(13)));
-
-        }
-        object.put("timeOfEvent", LocalDateTime.now().toString());
-        ESClientService.indexDocument("testindex1", "testtype", object);
+//        Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)(\\d+)(.*)((\\d+)(\\.)(\\d+))((\\d+)(\\.)(\\d+))((\\d{2})(\\:)(\\d{2})(\\:)(\\d{2}))");
     }
 
     public static void initSimulation() throws Exception {
@@ -95,18 +78,16 @@ public class ProcessLog {
             String float2 = matcher.group(6);
             String float3 = matcher.group(7);
 
-            Map object = new HashMap();
-            object.put("userName", word1);
-            object.put("VirtualSize", int2);
-            object.put("processName", unixpath1);
-            object.put("cpuUsagePercentage", float1);
-            object.put("memoryUsagePercentage", float2);
-            object.put("upTime", float3);
+            StatisticsES statisticsES = new StatisticsES();
 
-//            System.out.print("(" + int1.toString() + ")" + "(" + word1.toString() + ")" + "(" + int2.toString() + ")" + "(" + unixpath1.toString() + ")" + "(" + float1.toString() + ")" + "(" + float2.toString() + ")" + "(" + float3.toString() + ")" + "\n");
-
-            object.put("timeOfEvent", LocalDateTime.now().toString());
-            ESClientService.indexDocument("testindex1", "testtype", object);
+            statisticsES.setUserName(word1);
+            statisticsES.setVirtualSize(Long.parseLong(int2));
+            statisticsES.setProcessName(unixpath1);
+            statisticsES.setCpuUsagePercentage(Double.parseDouble(float1));
+            statisticsES.setMemUsuagePercentage(Double.parseDouble(float2));
+            statisticsES.setUptime(Double.parseDouble(float3));
+            statisticsES.setTimeOfEvent(DateTime.now().toString());
+            ESClientService.indexDocument(statisticsES);
 
         }
     }

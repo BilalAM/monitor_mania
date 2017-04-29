@@ -1,6 +1,6 @@
 package com.monitor.services;
 
-import com.monitor.beans.OSType;
+import com.monitor.pojos.OSType;
 
 import java.io.IOException;
 import java.io.OutputStream;

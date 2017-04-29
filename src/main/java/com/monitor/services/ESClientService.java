@@ -10,7 +10,6 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
 
 /**
  * @author saifasif
@@ -18,7 +17,6 @@ import java.util.Map;
 public class ESClientService {
 
     private static TransportClient INSTANCE;
-    private static  IndexRequest indexRequest = new IndexRequest("testindex1", "testtype");
 
     private ESClientService() {
     }
@@ -45,8 +43,9 @@ public class ESClientService {
 
     }
 
-    public static void indexDocument(String indexName, String indexType, Map o) {
-        indexRequest.source(o);
+    public static <T> void indexDocument(T instance) {
+        String json = new Gson().toJson(instance);
+        IndexRequest indexRequest = new IndexRequest("statistics", "stats").source(json);
         IndexResponse response = getTransportClient().index(indexRequest).actionGet();
 
     }

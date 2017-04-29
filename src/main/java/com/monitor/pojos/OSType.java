@@ -1,4 +1,4 @@
-package com.monitor.beans;
+package com.monitor.pojos;
 
 /**
  * @author saifasif

@@ -1,6 +1,6 @@
 package com.test.services;
 
-import com.monitor.beans.OSType;
+import com.monitor.pojos.OSType;
 import com.monitor.services.CommandService;
 import org.junit.Test;
 
