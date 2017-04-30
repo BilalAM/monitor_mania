@@ -20,3 +20,7 @@ site-content
 /bin/
 /tmp.txt
 /tmp
+
+
+# python related files
+*.pyc
