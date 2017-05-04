@@ -52,6 +52,7 @@ public class ProcessLog {
     }
 
     private static void processStringv2(String token) {
+        /*
         String re1 = ".*?";    // Non-greedy match on filler
         String re2 = "(1)";    // Integer Number 1
         String re3 = ".*?";    // Non-greedy match on filler
@@ -89,7 +90,34 @@ public class ProcessLog {
             statisticsES.setTimeOfEvent(DateTime.now().toString());
             ESClientService.indexDocument(statisticsES);
 
-        }
+        }*/
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm");
+
+		convertedString = token.replaceAll("\\s", "");
+		String processID = "(?<PID>(\\d+))";
+		String userName = "(?<USRNAME>([A-Za-z]+))";
+		String memorySize = "(?<MSIZE>(\\d+))";
+		String unixPath = "(?<UXPATH>(.*))";
+		String cpuUsage = "(?<CPU>((\\d+)(\\.)(\\d+)))";
+		String memoryUsage = "(?<MM>((\\d+)(\\.)(\\d+)))";
+		String upTime = "(?<UTIME>((\\d{2})(\\:)(\\d{2})(\\:)(\\d{2})))";
+
+		Pattern pattern = Pattern
+				.compile(processID + userName + memorySize + unixPath + cpuUsage + memoryUsage + upTime);
+
+		matcher = pattern.matcher(convertedString);
+
+		while (matcher.find()) {
+			StatisticsES statistics = new StatisticsES();
+			statistics.setUserName(matcher.group("USRNAME"));
+			statistics.setProcessName(matcher.group("UXPATH"));
+			statistics.setCpuUsagePercentage(Double.parseDouble(matcher.group("CPU")));
+			statistics.setMemUsuagePercentage(Double.parseDouble(matcher.group("MM")));
+			statistics.setVirtualSize(Long.parseLong(matcher.group("MSIZE")));
+			statistics.setUptime(matcher.group("UTIME"));
+			statistics.setTimeOfEvent(LocalDateTime.now().format(formatter));
+			ESClientService.indexDocument(statistics);
+		}
     }
 }
 
